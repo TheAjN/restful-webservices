@@ -42,6 +42,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- to use .jsp files in intellj -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>required</scope> <!-- 'provided' for Eclipse, 'required' for IntelliJ -->
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
