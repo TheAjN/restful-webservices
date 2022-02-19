@@ -31,8 +31,8 @@ public class customizedResponseEntityExceptionHandler
     }
 
     // custom Exception
-    @ExceptionHandler(userNotFoundException.class)
-    public final ResponseEntity<Object> handleuserNotFoundExceptions(userNotFoundException ex,
+    @ExceptionHandler({userNotFoundException.class, noUserAvailableException.class})
+    public final ResponseEntity<Object> handleUserNotFoundException(userNotFoundException ex,
                                                                      WebRequest request) {
 
         ExceptionResponse exceptionResponse =
@@ -41,5 +41,14 @@ public class customizedResponseEntityExceptionHandler
 
         return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(noUserNameException.class)
+    public final ResponseEntity<Object> handleNoUserNameException(noUserNameException e,WebRequest w){
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),e.getMessage(),w.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+
 
 }

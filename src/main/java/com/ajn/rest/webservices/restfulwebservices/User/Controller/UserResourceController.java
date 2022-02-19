@@ -1,7 +1,9 @@
 package com.ajn.rest.webservices.restfulwebservices.User.Controller;
 
 
+import com.ajn.rest.webservices.restfulwebservices.User.Bean.Post;
 import com.ajn.rest.webservices.restfulwebservices.User.Bean.User;
+import com.ajn.rest.webservices.restfulwebservices.User.Exception.noUserNameException;
 import com.ajn.rest.webservices.restfulwebservices.User.Exception.userNotFoundException;
 import com.ajn.rest.webservices.restfulwebservices.User.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,11 @@ public class UserResourceController {
     //retrieve All Users
     @GetMapping("users")
     public List<User> retrieveAllUsers() {
+
+        if(userDAO.findAll().isEmpty()){
+            throw new userNotFoundException("NO Users added");
+        }
+        //   throw new handleAllExceptions();
         return userDAO.findAll();
     }
 
@@ -29,11 +36,23 @@ public class UserResourceController {
     public User retrieveAUser(@PathVariable int id) {
         User user = userDAO.find(id);
 
-        if(user == null){
-            throw new userNotFoundException("id - "+ id);
+
+        if (user == null) {
+            throw new userNotFoundException("id - " + id);
         }
 
         return user;
+    }
+
+
+    @DeleteMapping("users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        User user = userDAO.deleteById(id);
+
+        if (user == null) {
+            throw new userNotFoundException("id - " + id);
+        }
+
     }
 
 
@@ -46,6 +65,10 @@ public class UserResourceController {
         //the User object
         User savedUser = userDAO.save(user);
 
+        if(savedUser.getName() == null || savedUser.getName().equals("") ){
+            throw new noUserNameException("NO User name provided");
+        }
+
         //once a user is created
         // 1. we need to send a status code called CREATED (which is status code - 201)
         // for that we need to return ResponseEntity<T>
@@ -57,8 +80,32 @@ public class UserResourceController {
                 .toUri();       //convert it into a URI
 
         return ResponseEntity.created(location).build();    //assigns the URI,
-                                                            //returns a response entity and the created
-                                                            //user as a Response
+        //returns a response entity and the created
+        //user as a Response
+    }
+
+    @GetMapping("users/{id}/posts")
+    public List<Post> getUserPosts(@PathVariable int id) {
+
+        return userDAO.find(id).getPostDAO().getAllPosts();
+    }
+
+    @GetMapping("users/{id}/posts/{post_id}")
+    public Post getUserPost(@PathVariable int id, @PathVariable int post_id) {
+
+        return userDAO.find(id).getPostDAO().getPost(id);
+    }
+
+    @PostMapping("users/{id}/posts")
+    public ResponseEntity<Post> createPost(@PathVariable int id, @RequestBody Post post) {
+        Post savedPost = userDAO.find(id).getPostDAO().savePost(post);
+
+        URI locationPost = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{post_id}")
+                .buildAndExpand(savedPost.getId())
+                .toUri();
+
+        return ResponseEntity.created(locationPost).build();
     }
 
 }
