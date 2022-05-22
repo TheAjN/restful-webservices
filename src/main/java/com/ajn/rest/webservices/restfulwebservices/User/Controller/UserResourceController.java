@@ -7,10 +7,13 @@ import com.ajn.rest.webservices.restfulwebservices.User.Exception.noUserNameExce
 import com.ajn.rest.webservices.restfulwebservices.User.Exception.userNotFoundException;
 import com.ajn.rest.webservices.restfulwebservices.User.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class UserResourceController {
 
     //retrieve a user
     @GetMapping("users/{id}")
-    public User retrieveAUser(@PathVariable int id) {
+    public EntityModel<User> retrieveAUser(@PathVariable int id) {
         User user = userDAO.find(id);
 
 
@@ -41,10 +44,23 @@ public class UserResourceController {
             throw new userNotFoundException("id - " + id);
         }
 
-        return user;
+        //-------------  HATEOAS Framework -----------------//
+
+        //Creating an EntityModel which is also compatible with links
+        EntityModel<User> userEntityModel = EntityModel.of(user);
+
+        //Creating a link
+        WebMvcLinkBuilder linkToAllUsers =
+               WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
+
+        //adding the link to the model
+        userEntityModel.add(linkToAllUsers.withRel("all-users"));
+
+        //returning the object as type EntityModel
+        return userEntityModel;
     }
 
-
+    //Delete a user
     @DeleteMapping("users/{id}")
     public void deleteUser(@PathVariable int id) {
         User user = userDAO.deleteById(id);
@@ -60,7 +76,7 @@ public class UserResourceController {
     //input - details of a user
     //output - display the created user(return the created URI)
     @PostMapping("users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         //@RequestBody maps the request from the webpage to
         //the User object
         User savedUser = userDAO.save(user);
@@ -84,18 +100,21 @@ public class UserResourceController {
         //user as a Response
     }
 
+    //gets all the posts from a single user
     @GetMapping("users/{id}/posts")
     public List<Post> getUserPosts(@PathVariable int id) {
 
         return userDAO.find(id).getPostDAO().getAllPosts();
     }
 
+    //gets a particular post from a single user
     @GetMapping("users/{id}/posts/{post_id}")
     public Post getUserPost(@PathVariable int id, @PathVariable int post_id) {
 
         return userDAO.find(id).getPostDAO().getPost(id);
     }
 
+    //create a post for a user
     @PostMapping("users/{id}/posts")
     public ResponseEntity<Post> createPost(@PathVariable int id, @RequestBody Post post) {
         Post savedPost = userDAO.find(id).getPostDAO().savePost(post);

@@ -1,8 +1,9 @@
 package com.ajn.rest.webservices.restfulwebservices.User.Exception;
 
-import org.springframework.http.HttpHeaders;
+import   org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +41,15 @@ public class customizedResponseEntityExceptionHandler
 
 
         return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
+
+    //Exception handled for unvalidated requests
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), "Validation failed",ex.getBindingResult().toString()); //getBindingResult() returns the details to the consumer on what went wrong
+
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(noUserNameException.class)
