@@ -36,6 +36,8 @@ public class PostDAO {
     }
 
     public Post findPost(int id) {
+
+
         for (Post p : posts) {
             if (p.equals(posts.get(id))) {
                 return p;

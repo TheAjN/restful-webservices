@@ -2,16 +2,25 @@ package com.ajn.rest.webservices.restfulwebservices.User.Bean;
 
 import com.ajn.rest.webservices.restfulwebservices.User.dao.PostDAO;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue
     private Integer id;
 
     //@Min(value=2)
@@ -20,6 +29,8 @@ public class User {
     @Past
     private Date birthDate;
 
+    //@Transient must be annotated if the field is of type Entity class
+    @Transient
     @Autowired
     private PostDAO postDAO;
 
