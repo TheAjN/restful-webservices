@@ -1,21 +1,18 @@
-package com.ajn.rest.webservices.restfulwebservices.User.dao;
+package com.ajn.rest.webservices.restfulwebservices.User.Service;
 
 
 import com.ajn.rest.webservices.restfulwebservices.User.Bean.Post;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Repository
-public class PostDAO {
+public class PostService {
 
     private final List<Post> posts;
 
     private static int count=0;
 
-    public PostDAO() {
+    public PostService() {
         posts = new ArrayList<>();
     }
 

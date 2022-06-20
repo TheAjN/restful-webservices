@@ -1,21 +1,21 @@
-package com.ajn.rest.webservices.restfulwebservices.User.dao;
+package com.ajn.rest.webservices.restfulwebservices.User.Service;
 
 import com.ajn.rest.webservices.restfulwebservices.User.Bean.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-@Repository //or @Component
-public class UserDAO {
+@Service //or @Component
+public class UserService {
 
     private static List<User> userList;
 
     private static int count = 3;
 
-    public UserDAO() {
+    public UserService() {
 
         userList = new ArrayList<>();
 
