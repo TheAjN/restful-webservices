@@ -104,27 +104,33 @@ public class UserResourceController {
     @GetMapping("users/{id}/posts")
     public List<Post> getUserPosts(@PathVariable int id) {
 
-        return userService.find(id).getPostService().getAllPosts();
+      //  return userService.find(id).getPostService().getAllPosts();
+
+        return null;
     }
 
     //gets a particular post from a single user
     @GetMapping("users/{id}/posts/{post_id}")
     public Post getUserPost(@PathVariable int id, @PathVariable int post_id) {
 
-        return userService.find(id).getPostService().getPost(id);
+     //   return userService.find(id).getPostService().getPost(id);
+
+        return null;
     }
 
     //create a post for a user
     @PostMapping("users/{id}/posts")
     public ResponseEntity<Post> createPost(@PathVariable int id, @RequestBody Post post) {
-        Post savedPost = userService.find(id).getPostService().savePost(post);
+       /* Post savedPost = userService.find(id).getPostService().savePost(post);
 
         URI locationPost = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{post_id}")
                 .buildAndExpand(savedPost.getId())
                 .toUri();
 
-        return ResponseEntity.created(locationPost).build();
+        return ResponseEntity.created(locationPost).build();*/
+
+        return null;
     }
 
 }

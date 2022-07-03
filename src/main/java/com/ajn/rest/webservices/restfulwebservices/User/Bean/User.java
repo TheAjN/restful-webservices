@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,14 +29,17 @@ public class User {
     //@Transient must be annotated if the field is of type Entity class
 
  //   @Autowired
-    @Transient
-    private PostService postService;
+/*    @Transient
+    private PostService postService;*/
+
+    @OneToMany(mappedBy = "user") // "user" field from Post Entity
+    private List<Post> posts;
 
     public User(Integer id, String name, Date birthDate) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
-        postService = new PostService();
+     //   postService = new PostService();
     }
 
 }

@@ -113,28 +113,32 @@ public class UserResourceJPAController {
     @GetMapping("jpa/users/{id}/posts")
     public List<Post> getUserPosts(@PathVariable int id) {
 
-        return userRepository.getById(id).getPostService().getAllPosts();
+      //  return userRepository.getById(id).getPostService().getAllPosts();
+
+        return null;
     }
 
     //gets a particular post from a single user
     @GetMapping("jpa/users/{id}/posts/{post_id}")
     public Post getUserPost(@PathVariable int id, @PathVariable int post_id) {
 
-        return userRepository.getById(id).getPostService().getPost(id);
+     //   return userRepository.getById(id).getPostService().getPost(id);
+        return null;
     }
 
     //create a post for a user
     @PostMapping("jpa/users/{id}/posts")
     public ResponseEntity<Post> createPost(@PathVariable int id, @RequestBody Post post) {
-        Post savedPost = userRepository.findById(id).isPresent() ? userRepository.findById(id)
-                .get().getPostService().savePost(post) : new Post();
+   //     Post savedPost = userRepository.findById(id).isPresent() ? userRepository.findById(id)
+      //          .get().getPostService().savePost(post) : new Post();
 
-        URI locationPost = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{post_id}")
-                .buildAndExpand(savedPost.getId())
-                .toUri();
+     //   URI locationPost = ServletUriComponentsBuilder
+     //           .fromCurrentRequest().path("/{post_id}")
+        //        .buildAndExpand(savedPost.getId())
+      //          .toUri();
 
-        return ResponseEntity.created(locationPost).build();
+      //  return ResponseEntity.created(locationPost).build();
+        return null;
     }
 
 }

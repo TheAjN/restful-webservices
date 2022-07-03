@@ -1,18 +1,16 @@
 package com.ajn.rest.webservices.restfulwebservices.User.Bean;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.PastOrPresent;
 import java.util.Date;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Entity
 public class Post {
 
@@ -23,4 +21,16 @@ public class Post {
     private String content;
     private Date timeStamp;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", timeStamp=" + timeStamp +
+                '}';
+    }
 }
